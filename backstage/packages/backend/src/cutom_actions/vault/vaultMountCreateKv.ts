@@ -16,7 +16,7 @@ function vaultMountCreateKvSchema() {
   return {
     input: {
       type: 'object',
-      required: ['mount', 'name'],
+      required: ['mount'],
       properties: {
         mount: {
           title: 'mount',

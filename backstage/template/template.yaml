@@ -1,0 +1,78 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-template
+kind: Template
+metadata:
+  name: example-nodejs-template
+  title: Example Node.js Template
+  description: An example template for the scaffolder that creates a simple Node.js service
+spec:
+  owner: user:guest
+  type: service
+
+  # These parameters are used to generate the input form in the frontend, and are
+  # used to gather input data for the execution of the template.
+  parameters:
+    - title: Fill in some steps
+      required:
+        - secret_mount
+        - auth_mount
+        - username
+        - user_password
+      properties:
+        secret_mount:
+          title: secret_mount
+          type: string
+          description: secret_mount
+        auth_mount:
+          title: auth_mount
+          type: string
+          description: auth_mount
+        username:
+          title: username
+          type: string
+          description: username
+        user_password:
+          title: user_password
+          type: string
+          description: user_password
+
+  # These steps are executed in the scaffolder backend, using data that we gathered
+  # via the parameters above.
+  steps:
+    # Each step executes an action, in this case one templates files into the working directory.
+    - id: create_kv
+      name: create kv
+      action: vault:mount:createKv
+      input:
+        mount: ${{ parameters.secret_mount }}
+    
+    - id: load_secret
+      name: load secret
+      action: vault:secret:create
+      input:
+        mount: ${{ parameters.secret_mount }}
+        name: user
+        secrets:
+          password: ${{ parameters.user_password }}
+    
+    - id: get_secret
+      name: get secret
+      action: vault:secret:get
+      input:
+        mount: ${{ parameters.secret_mount }}
+        name: user
+    
+    - id: create_auth
+      name: create auth
+      action: vault:auth:createUserPass
+      input:
+        mount: ${{ parameters.auth_mount }}
+        listing_visibility: unauth
+    
+    - id: create_user
+      name: create user
+      action: vault:userpass:createUser
+      input:
+        mount: ${{ parameters.auth_mount }}
+        username: ${{ parameters.username }}
+        password: ${{ steps['get_secret'].output.secrets['password'] }}

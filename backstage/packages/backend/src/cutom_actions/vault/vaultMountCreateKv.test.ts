@@ -23,10 +23,17 @@ describe('vault:mount:createKv', () => {
 
   it('echo the string passed', async () => {
     const spy = jest.spyOn(global, 'fetch')
+      .mockImplementationOnce(() =>
+        Promise.resolve(
+          {
+            status: 204, json: jest.fn(()=> Promise.resolve({}))
+          }
+        ) as unknown as Promise<Response>
+      )
       .mockImplementation(() =>
         Promise.resolve(
           {
-            status: 204, json: Promise.resolve([])
+            status: 200, json: jest.fn(()=> Promise.resolve({data:{"test_kv/": {}}}))
           }
         ) as unknown as Promise<Response>
       )

@@ -8,7 +8,9 @@ export function vaultUserpassCreateUser(base: VaultBase) {
     schema: vaultUserpassCreateUserSchema(),
     async handler (ctx){
       const user = ctx.input
-      createUserpassUser(base,user)
+      const res = await createUserpassUser(base,user)
+
+      ctx.logger.error(JSON.stringify(res))
     }
   })
 }

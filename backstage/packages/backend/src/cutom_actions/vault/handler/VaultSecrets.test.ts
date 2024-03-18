@@ -2,17 +2,24 @@ import { createMountKv, createSecret, getSecret } from "./VaultSecrets";
 
 describe("vault secret tests", () => {
   const base_url = "http://localhost:8200/v1"
-  const token = "token"
+  const token = "test"
   afterEach(() => {
     jest.restoreAllMocks()
   })
 
   test("make kv mount", async () => {
     jest.spyOn(global, 'fetch')
+      .mockImplementationOnce(() =>
+        Promise.resolve(
+          {
+            status: 204, json: jest.fn(()=> Promise.resolve({data:{"playground12/": {}}}))
+          }
+        ) as unknown as Promise<Response>
+      )
       .mockImplementation(() =>
         Promise.resolve(
           {
-            status: 204, json: Promise.resolve([])
+            status: 200, json: jest.fn(()=> Promise.resolve({data:{"playground12/": {}}}))
           }
         ) as unknown as Promise<Response>
       )
@@ -23,10 +30,10 @@ describe("vault secret tests", () => {
         token: token
       },
       {
-      mount: "playground5"
+      mount: "playground12"
       }
     )
-    expect((await res).status).toBe(204)
+    expect((await res).status).toBe(200)
   })
   test("create secret", async () => {
     jest.spyOn(global, 'fetch')
@@ -43,15 +50,14 @@ describe("vault secret tests", () => {
         token: token
       },
       {
-        mount: "playground5",
-        name: "test_secret1",
+        mount: "bsSecret",
+        name: "user_test",
         secrets: {
-          "secrets": "yay",
-          "foo": "bar"
+          "password": "yay",
         }
       }
     )
-    expect((await res).status).toBe(204)
+    expect((await res)?? {status:500}.status).toBe(204)
   })
   test("get secret", async () => {
     jest.spyOn(global, 'fetch')

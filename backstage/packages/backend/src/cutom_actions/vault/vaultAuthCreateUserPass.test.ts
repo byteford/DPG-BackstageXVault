@@ -1,6 +1,5 @@
 import { getVoidLogger } from "@backstage/backend-common";
 import { PassThrough } from 'stream';
-import { vaultSecretCreate } from "./vaultSecretCreate";
 import { vaultAuthCreateUserPass } from "./vaultAuthCreateUserPass";
 
 describe('vault:auth:createUserPass', () => {

@@ -1,5 +1,5 @@
-import { ActionContext, createTemplateAction } from "@backstage/plugin-scaffolder-node"
-import { VaultAuth, VaultBase, VaultSecret } from "./handler/types";
+import { createTemplateAction } from "@backstage/plugin-scaffolder-node"
+import { VaultAuth, VaultBase} from "./handler/types";
 import { createAuthUserpass } from "./handler/VaultAuth";
 export function vaultAuthCreateUserPass(base: VaultBase) {
   return createTemplateAction<VaultAuth>({

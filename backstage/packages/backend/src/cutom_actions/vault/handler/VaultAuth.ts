@@ -20,17 +20,22 @@ export async function createAuthUserpass(base: VaultBase, auth: VaultAuth) {
 }
 
 export async function createUserpassUser(base: VaultBase, userpass: VaultUserpass) {
-  const res = makeRequest(
-    {
-      base: base,
-      method: "POST",
-      endpoint: `/auth/${userpass.mount}/users/${userpass.username}`,
-      body: {
-        password: userpass.password ?? "password",
-        token_policies: userpass.policies
+  let created = false
+  do {
+    const res = makeRequest(
+      {
+        base: base,
+        method: "POST",
+        endpoint: `/auth/${userpass.mount}/users/${userpass.username}`,
+        body: {
+          password: userpass.password ?? "password",
+          token_policies: userpass.policies
+        }
       }
+    )
+    const resp = await res
+    if (resp.status === 204) {
+      created = true
     }
-  )
-
-  return await res
+  } while (!created)
 }
