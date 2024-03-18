@@ -15,3 +15,15 @@ export type vault_secret = {
   name: string,
   secrets?: {}
 }
+
+export type vault_auth = {
+  mount: string,
+  listing_visibility?: "unauth" | "hidden"
+}
+
+export type vault_userpass = {
+  mount: string,
+  username: string,
+  password?: string
+  policies?: [string]
+}

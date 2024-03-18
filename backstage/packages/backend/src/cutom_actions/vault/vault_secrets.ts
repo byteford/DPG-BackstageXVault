@@ -1,19 +1,9 @@
-import { vault_base, vault_request, vault_secret } from "./types"
+import { vault_base, vault_secret } from "./types"
+import { make_request } from "./vault_utils"
 
-export async function make_request(req: vault_request) {
-  const options = {
-    method: req.method,
-    headers: {
-      "X-Vault-Token": req.base.token
-    },
-    body: JSON.stringify(req.body)
-  }
-  console.log(`calling: ${req.base.url + req.endpoint}`)
-  const res = fetch(req.base.url + req.endpoint, options)
-  return await res
-}
 
-export async function create_mount(base: vault_base, mount_name: string) {
+
+export async function create_mount_kv(base: vault_base, mount_name: string) {
   const res = make_request(
     {
       base: base,

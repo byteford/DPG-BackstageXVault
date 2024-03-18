@@ -1,37 +1,13 @@
-import { create_mount, create_secret, get_secret, make_request } from "./vault_handler";
+import { create_mount_kv, create_secret, get_secret } from "./vault_secrets";
 
-describe("vault hander tests", () => {
+describe("vault secret tests", () => {
   const base_url = "http://localhost:8200/v1"
   const token = "token"
   afterEach(() => {
     jest.restoreAllMocks()
   })
-  test("run a request", async () => {
-    jest.spyOn(global, 'fetch')
-      .mockImplementation(() =>
-        Promise.resolve(
-          {
-            status: 204, json: Promise.resolve([])
-          }
-        ) as unknown as Promise<Response>
-      )
-    const res = make_request(
-      {
-        base: {
-          url: base_url,
-          token: token
-        },
-        method: "POST",
-        endpoint: "/sys/mounts/playground4",
-        body: {
-          type: "kv"
-        }
-      }
-    )
-    expect((await res).status).toBe(204)
-  })
 
-  test("make mount", async () => {
+  test("make kv mount", async () => {
     jest.spyOn(global, 'fetch')
       .mockImplementation(() =>
         Promise.resolve(
@@ -40,9 +16,10 @@ describe("vault hander tests", () => {
           }
         ) as unknown as Promise<Response>
       )
-    const res = create_mount(
+    const res = create_mount_kv(
       {
         url: base_url,
+        
         token: token
       },
       "playground5"
