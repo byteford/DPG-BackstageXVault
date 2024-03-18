@@ -10,6 +10,10 @@ export type VaultRequest = {
     body?: any
 }
 
+export type VaultMount = {
+  mount: string
+}
+
 export type VaultSecret = {
   mount: string,
   name: string,
