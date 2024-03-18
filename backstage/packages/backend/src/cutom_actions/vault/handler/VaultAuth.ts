@@ -1,8 +1,8 @@
-import { vault_auth, vault_base, vault_userpass } from "./types"
-import { make_request } from "./vault_utils"
+import { VaultAuth, VaultBase, VaultUserpass } from "./types"
+import { makeRequest } from "./VaultUtils"
 
-export async function create_auth_userpass(base: vault_base, auth: vault_auth) {
-  const res = make_request(
+export async function createAuthUserpass(base: VaultBase, auth: VaultAuth) {
+  const res = makeRequest(
     {
       base: base,
       method: "POST",
@@ -19,8 +19,8 @@ export async function create_auth_userpass(base: vault_base, auth: vault_auth) {
   return await res
 }
 
-export async function create_userpass_user(base: vault_base, userpass: vault_userpass) {
-  const res = make_request(
+export async function createUserpassUser(base: VaultBase, userpass: VaultUserpass) {
+  const res = makeRequest(
     {
       base: base,
       method: "POST",

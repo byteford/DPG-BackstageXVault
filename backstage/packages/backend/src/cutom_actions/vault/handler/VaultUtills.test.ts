@@ -1,4 +1,4 @@
-import { make_request } from "./vault_utils";
+import { makeRequest } from "./VaultUtils";
 
 describe("vault util tests", () => {
   const base_url = "http://localhost:8200/v1"
@@ -15,7 +15,7 @@ describe("vault util tests", () => {
           }
         ) as unknown as Promise<Response>
       )
-    const res = make_request(
+    const res = makeRequest(
       {
         base: {
           url: base_url,

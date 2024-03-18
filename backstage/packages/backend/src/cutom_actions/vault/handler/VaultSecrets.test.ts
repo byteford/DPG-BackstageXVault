@@ -1,4 +1,4 @@
-import { create_mount_kv, create_secret, get_secret } from "./vault_secrets";
+import { createMountKv, createSecret, getSecret } from "./VaultSecrets";
 
 describe("vault secret tests", () => {
   const base_url = "http://localhost:8200/v1"
@@ -16,13 +16,15 @@ describe("vault secret tests", () => {
           }
         ) as unknown as Promise<Response>
       )
-    const res = create_mount_kv(
+    const res = createMountKv(
       {
         url: base_url,
         
         token: token
       },
-      "playground5"
+      {
+      mount: "playground5"
+      }
     )
     expect((await res).status).toBe(204)
   })
@@ -35,7 +37,7 @@ describe("vault secret tests", () => {
           }
         ) as unknown as Promise<Response>
       )
-    const res = create_secret(
+    const res = createSecret(
       {
         url: base_url,
         token: token
@@ -60,7 +62,7 @@ describe("vault secret tests", () => {
           }
         ) as unknown as Promise<Response>
       )
-    const secret = get_secret(
+    const secret = getSecret(
       {
         url: base_url,
         token: token

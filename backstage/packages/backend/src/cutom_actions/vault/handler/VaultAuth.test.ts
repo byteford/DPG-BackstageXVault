@@ -1,4 +1,4 @@
-import { create_auth_userpass, create_userpass_user } from "./vault_auth";
+import { createAuthUserpass, createUserpassUser } from "./VaultAuth";
 
 describe("vault auth tests", () => {
   const base_url = "http://localhost:8200/v1"
@@ -16,7 +16,7 @@ describe("vault auth tests", () => {
           }
         ) as unknown as Promise<Response>
       )
-    const res = create_auth_userpass(
+    const res = createAuthUserpass(
       {
         url: base_url,
         token: token
@@ -37,13 +37,13 @@ describe("vault auth tests", () => {
           }
         ) as unknown as Promise<Response>
       )
-    const res = create_userpass_user(
+    const res = createUserpassUser(
       {
         url: base_url,
         token: token
       },
       {
-        mount: "userauth",
+        mount: "test_mount",
         username: "james"
       }
     )

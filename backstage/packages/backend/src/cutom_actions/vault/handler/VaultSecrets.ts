@@ -1,14 +1,14 @@
-import { vault_base, vault_secret } from "./types"
-import { make_request } from "./vault_utils"
+import { VaultBase, VaultMount, VaultSecret } from "./types"
+import { makeRequest } from "./VaultUtils"
 
 
 
-export async function create_mount_kv(base: vault_base, mount_name: string) {
-  const res = make_request(
+export async function createMountKv(base: VaultBase, mount: VaultMount) {
+  const res = makeRequest(
     {
       base: base,
       method: "POST",
-      endpoint: `/sys/mounts/${mount_name}`,
+      endpoint: `/sys/mounts/${mount.mount}`,
       body: {
         type: "kv"
       }
@@ -18,8 +18,8 @@ export async function create_mount_kv(base: vault_base, mount_name: string) {
   return await res
 }
 
-export async function create_secret(base: vault_base, secret: vault_secret) {
-  const res = make_request(
+export async function createSecret(base: VaultBase, secret: VaultSecret) {
+  const res = makeRequest(
     {
       base: base,
       method: "POST",
@@ -31,8 +31,8 @@ export async function create_secret(base: vault_base, secret: vault_secret) {
   return await res
 }
 
-export async function get_secret(base: vault_base, secret: vault_secret) {
-  const res = make_request(
+export async function getSecret(base: VaultBase, secret: VaultSecret) {
+  const res = makeRequest(
     {
       base: base,
       method: "GET",

@@ -1,6 +1,6 @@
-import { vault_request } from "./types"
+import { VaultRequest } from "./types"
 
-export async function make_request(req: vault_request) {
+export async function makeRequest(req: VaultRequest) {
   const options = {
     method: req.method,
     headers: {
