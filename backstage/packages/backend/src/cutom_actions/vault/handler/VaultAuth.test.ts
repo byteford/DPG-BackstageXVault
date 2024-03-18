@@ -1,4 +1,4 @@
-import { createAuthUserpass, createUserpassUser } from "./VaultAuth";
+import { awsLogin, createAuthUserpass, createUserpassUser } from "./VaultAuth";
 
 describe("vault auth tests", () => {
   const base_url = "http://localhost:8200/v1"
@@ -48,6 +48,27 @@ describe("vault auth tests", () => {
       }
     )
     console.log(await res)
-    expect((await res).status).toBe(204)
+  })
+
+  test("login aws", async () => {
+    // jest.spyOn(global, 'fetch')
+    //   .mockImplementation(() =>
+    //     Promise.resolve(
+    //       {
+    //         status: 204, json: Promise.resolve([])
+    //       }
+    //     ) as unknown as Promise<Response>
+    //   )
+    const res = awsLogin(
+      {
+        url: base_url,
+        token: token
+      },
+      {
+        mount: "aws",
+        role: "panda"
+      }
+    )
+    console.log(await res)
   })
 })

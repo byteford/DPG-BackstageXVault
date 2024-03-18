@@ -31,3 +31,8 @@ export type VaultUserpass = {
   password?: string
   policies?: [string]
 }
+
+export type VaultAws = {
+  mount: string,
+  role: string
+}
