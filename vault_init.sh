@@ -18,7 +18,6 @@ curl --location 'http://funny-panda.devopsplayground.org:8200/v1/auth/aws/role/p
 --header 'Content-Type: application/json' \
 --data '{
   "auth_type": "ec2",
-  "bound_ec2_instance_id": ["i-0c975f0ad228f16ed"],
-  "policies": ["default", "admin"],
-  "disallow_reauthentication": true
+  "bound_ec2_instance_id": ["i-038afc249523a09d0"],
+  "policies": ["default", "admin"]
 }'
