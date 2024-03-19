@@ -2,6 +2,9 @@ import { VaultAuth, VaultAws, VaultBase, VaultUserpass } from "./types"
 import { makeRequest } from "./VaultUtils"
 
 export async function createAuthUserpass(base: VaultBase, auth: VaultAuth) {
+  if (auth.token){
+    base.token = auth.token
+  }
   const res = makeRequest(
     {
       base: base,
@@ -20,6 +23,9 @@ export async function createAuthUserpass(base: VaultBase, auth: VaultAuth) {
 }
 
 export async function createUserpassUser(base: VaultBase, userpass: VaultUserpass) {
+  if (userpass.token){
+    base.token = userpass.token
+  }
   let created = false
   do {
     const res = makeRequest(

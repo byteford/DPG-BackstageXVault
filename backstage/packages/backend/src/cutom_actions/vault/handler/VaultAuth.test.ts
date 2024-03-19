@@ -51,14 +51,14 @@ describe("vault auth tests", () => {
   })
 
   test("login aws", async () => {
-    // jest.spyOn(global, 'fetch')
-    //   .mockImplementation(() =>
-    //     Promise.resolve(
-    //       {
-    //         status: 204, json: Promise.resolve([])
-    //       }
-    //     ) as unknown as Promise<Response>
-    //   )
+    jest.spyOn(global, 'fetch')
+      .mockImplementation(() =>
+        Promise.resolve(
+          {
+            status: 200, text: jest.fn(() =>Promise.resolve("")), json: jest.fn(() =>Promise.resolve({}))
+          }
+        ) as unknown as Promise<Response>
+      )
     const res = awsLogin(
       {
         url: base_url,

@@ -21,6 +21,11 @@ function vaultUserpassCreateUserSchema() {
       required: ['mount', 'username'],
       properties: {
         mount: {
+          token: {
+            title: 'token',
+            description: 'token used to connect to vault',
+            type: 'string',
+          },
           title: 'mount',
           description: 'mount location for userpass',
           type: 'string',

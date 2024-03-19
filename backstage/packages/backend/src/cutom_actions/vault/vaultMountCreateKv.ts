@@ -19,6 +19,11 @@ function vaultMountCreateKvSchema() {
       required: ['mount'],
       properties: {
         mount: {
+          token: {
+            title: 'token',
+            description: 'token used to connect to vault',
+            type: 'string',
+          },
           title: 'mount',
           description: 'mount location for kv',
           type: 'string',

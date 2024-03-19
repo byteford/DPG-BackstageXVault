@@ -18,6 +18,11 @@ function vaultSecretCreateSchema() {
       type: 'object',
       required: ['mount', 'name'],
       properties: {
+        token: {
+          title: 'token',
+          description: 'token used to connect to vault',
+          type: 'string',
+        },
         mount: {
           title: 'mount',
           description: 'mount location for secret',

@@ -4,6 +4,9 @@ import { makeRequest } from "./VaultUtils"
 
 
 export async function createMountKv(base: VaultBase, mount: VaultMount) {
+  if (mount.token){
+    base.token = mount.token
+  }
   let res = makeRequest(
     {
       base: base,
@@ -33,6 +36,9 @@ export async function createMountKv(base: VaultBase, mount: VaultMount) {
 }
 
 export async function createSecret(base: VaultBase, secret: VaultSecret) {
+  if (secret.token){
+    base.token = secret.token
+  }
   let created = false
   let resp
   do {
@@ -56,6 +62,9 @@ export async function createSecret(base: VaultBase, secret: VaultSecret) {
 }
 
 export async function getSecret(base: VaultBase, secret: VaultSecret) {
+  if (secret.token){
+    base.token = secret.token
+  }
   let resived = true
   do{
   const res = makeRequest(

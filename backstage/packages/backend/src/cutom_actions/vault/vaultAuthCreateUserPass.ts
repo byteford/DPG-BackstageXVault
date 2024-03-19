@@ -18,6 +18,11 @@ function vaultAuthCreateUserPassSchema() {
       type: 'object',
       required: ['mount', 'listing_visibility'],
       properties: {
+        token: {
+          title: 'token',
+          description: 'token used to connect to vault',
+          type: 'string',
+        },
         mount: {
           title: 'mount',
           description: 'mount location for auth mount',

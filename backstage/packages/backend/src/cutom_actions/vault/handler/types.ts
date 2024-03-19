@@ -11,21 +11,25 @@ export type VaultRequest = {
 }
 
 export type VaultMount = {
+  token?: string
   mount: string
 }
 
 export type VaultSecret = {
+  token?: string
   mount: string,
   name: string,
   secrets?: {}
 }
 
 export type VaultAuth = {
+  token?: string
   mount: string,
   listing_visibility?: "unauth" | "hidden"
 }
 
 export type VaultUserpass = {
+  token?: string
   mount: string,
   username: string,
   password?: string
@@ -33,6 +37,7 @@ export type VaultUserpass = {
 }
 
 export type VaultAws = {
+  token?: string
   mount: string,
   role: string
 }
