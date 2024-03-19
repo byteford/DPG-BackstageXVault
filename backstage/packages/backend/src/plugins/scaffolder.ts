@@ -8,6 +8,7 @@ import { vaultMountCreateKv } from "../cutom_actions/vault/vaultMountCreateKv";
 import { vaultSecretCreate } from '../cutom_actions/vault/vaultSecretCreate';
 import { vaultSecretGet } from '../cutom_actions/vault/vaultSecretGet';
 import { vaultUserpassCreateUser } from '../cutom_actions/vault/vaultUserPassCreateUser';
+import { vaultTokenCreate } from '../cutom_actions/vault/vaultTokenCreate';
 
 export default async function createPlugin(
   env: PluginEnvironment,
@@ -29,7 +30,8 @@ export default async function createPlugin(
     vaultMountCreateKv(vault_config),
     vaultSecretCreate(vault_config),
     vaultSecretGet(vault_config),
-    vaultUserpassCreateUser(vault_config)
+    vaultUserpassCreateUser(vault_config),
+    vaultTokenCreate(vault_config)
   ]
 
   return await createRouter({

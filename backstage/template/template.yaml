@@ -40,16 +40,26 @@ spec:
   # via the parameters above.
   steps:
     # Each step executes an action, in this case one templates files into the working directory.
+    
+    - id: create_token
+      name: create token
+      action: vault:mount:createKv
+      input:
+        mount: aws
+        role: panda
+
     - id: create_kv
       name: create kv
       action: vault:mount:createKv
       input:
+        token: ${{ steps['create_token'].output.secrets['token'] }}
         mount: ${{ parameters.secret_mount }}
     
     - id: load_secret
       name: load secret
       action: vault:secret:create
       input:
+        token: ${{ steps['create_token'].output.secrets['token'] }}
         mount: ${{ parameters.secret_mount }}
         name: user
         secrets:
@@ -59,6 +69,7 @@ spec:
       name: get secret
       action: vault:secret:get
       input:
+        token: ${{ steps['create_token'].output.secrets['token'] }}
         mount: ${{ parameters.secret_mount }}
         name: user
     
@@ -66,6 +77,7 @@ spec:
       name: create auth
       action: vault:auth:createUserPass
       input:
+        token: ${{ steps['create_token'].output.secrets['token'] }}
         mount: ${{ parameters.auth_mount }}
         listing_visibility: unauth
     
@@ -73,6 +85,7 @@ spec:
       name: create user
       action: vault:userpass:createUser
       input:
+        token: ${{ steps['create_token'].output.secrets['token'] }}
         mount: ${{ parameters.auth_mount }}
         username: ${{ parameters.username }}
         password: ${{ steps['get_secret'].output.secrets['password'] }}
