@@ -1,11 +1,11 @@
 import { createTemplateAction } from "@backstage/plugin-scaffolder-node"
-import { VaultAws, VaultBase, VaultUserpass } from "./handler/types";
-import { awsLogin, createUserpassUser } from "./handler/VaultAuth";
-export function vaultUserpassCreateUser(base: VaultBase) {
+import { VaultAws, VaultBase } from "./handler/types";
+import { awsLogin } from "./handler/VaultAuth";
+export function vaultTokenCreate(base: VaultBase) {
   return createTemplateAction<VaultAws>({
     id: "vault:token:create",
     description: "Creates a vault token",
-    schema: vaultUserpassCreateUserSchema(),
+    schema: vaultTokenCreateSchema(),
     async handler (ctx){
       const aws = ctx.input
       const res = await awsLogin(base,aws)
@@ -13,7 +13,7 @@ export function vaultUserpassCreateUser(base: VaultBase) {
     }
   })
 }
-function vaultUserpassCreateUserSchema() {
+function vaultTokenCreateSchema() {
   return {
     input: {
       type: 'object',
