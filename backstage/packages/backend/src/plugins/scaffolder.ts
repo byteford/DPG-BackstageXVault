@@ -4,12 +4,12 @@ import { ScmIntegrations } from '@backstage/integration';
 import { Router } from 'express';
 import type { PluginEnvironment } from '../types';
 import { 
-  vaultAuthCreateUserPass, 
-  vaultMountCreateKv, 
-  vaultSecretCreate,
-  vaultSecretGet,
-  vaultUserpassCreateUser,
-  vaultTokenCreate
+  // vaultAuthCreateUserPass, 
+  // vaultMountCreateKv, 
+  // vaultSecretCreate,
+  // vaultSecretGet,
+  // vaultUserpassCreateUser,
+  // vaultTokenCreate
 } from "@internal/backstage-plugin-scaffolder-backend-module-vault";
 export default async function createPlugin(
   env: PluginEnvironment,
@@ -27,12 +27,12 @@ export default async function createPlugin(
   const vault_config  ={url:"http://localhost:8200/v1", token:"test"}
   const actions =[
     ...builtInActions,
-    vaultAuthCreateUserPass(vault_config),
-    vaultMountCreateKv(vault_config),
-    vaultSecretCreate(vault_config),
-    vaultSecretGet(vault_config),
-    vaultUserpassCreateUser(vault_config),
-    vaultTokenCreate(vault_config)
+    // vaultAuthCreateUserPass(vault_config),
+    // vaultMountCreateKv(vault_config),
+    // vaultSecretCreate(vault_config),
+    // vaultSecretGet(vault_config),
+    // vaultUserpassCreateUser(vault_config),
+    // vaultTokenCreate(vault_config)
   ]
 
   return await createRouter({

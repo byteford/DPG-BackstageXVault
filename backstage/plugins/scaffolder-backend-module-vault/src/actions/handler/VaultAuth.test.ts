@@ -1,4 +1,5 @@
-import { awsLogin, createAuthUserpass, createUserpassUser } from "./VaultAuth";
+import { createAuthUserpass, createUserpassUser } from "./VaultAuth";
+import { awsLogin } from "./VaultAWSAuth";
 
 describe("vault auth tests", () => {
   const base_url = "http://localhost:8200/v1"

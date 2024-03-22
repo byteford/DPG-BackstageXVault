@@ -22,7 +22,7 @@ describe('vault:secret:get', () => {
   );
 
   it('echo the string passed', async () => {
-    const spy = jest.spyOn(global, 'fetch')
+    jest.spyOn(global, 'fetch')
       .mockImplementation(() =>
         Promise.resolve(
           {
