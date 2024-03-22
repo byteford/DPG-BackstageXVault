@@ -3,13 +3,14 @@ import { createBuiltinActions, createRouter } from '@backstage/plugin-scaffolder
 import { ScmIntegrations } from '@backstage/integration';
 import { Router } from 'express';
 import type { PluginEnvironment } from '../types';
-import { vaultAuthCreateUserPass } from '../cutom_actions/vault/vaultAuthCreateUserPass';
-import { vaultMountCreateKv } from "../cutom_actions/vault/vaultMountCreateKv";
-import { vaultSecretCreate } from '../cutom_actions/vault/vaultSecretCreate';
-import { vaultSecretGet } from '../cutom_actions/vault/vaultSecretGet';
-import { vaultUserpassCreateUser } from '../cutom_actions/vault/vaultUserPassCreateUser';
-import { vaultTokenCreate } from '../cutom_actions/vault/vaultTokenCreate';
-
+import { 
+  vaultAuthCreateUserPass, 
+  vaultMountCreateKv, 
+  vaultSecretCreate,
+  vaultSecretGet,
+  vaultUserpassCreateUser,
+  vaultTokenCreate
+} from "@internal/backstage-plugin-scaffolder-backend-module-vault";
 export default async function createPlugin(
   env: PluginEnvironment,
 ): Promise<Router> {
