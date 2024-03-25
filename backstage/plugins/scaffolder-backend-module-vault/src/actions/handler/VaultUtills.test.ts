@@ -1,4 +1,4 @@
-import { makeRequest } from "./VaultUtils";
+import { makeRequest } from "./vaultUtils";
 
 describe("vault util tests", () => {
   const base_url = "http://localhost:8200/v1"

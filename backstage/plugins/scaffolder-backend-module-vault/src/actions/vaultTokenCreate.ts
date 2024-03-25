@@ -1,6 +1,6 @@
 import { createTemplateAction } from "@backstage/plugin-scaffolder-node"
 import { VaultAws, VaultBase } from "./handler/types";
-import { awsLogin } from "./handler/VaultAWSAuth";
+import { awsLogin } from "./handler/vaultAWSAuth";
 export function vaultTokenCreate(base: VaultBase) {
   return createTemplateAction<VaultAws>({
     id: "vault:token:create",

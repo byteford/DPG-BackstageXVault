@@ -1,5 +1,5 @@
 import { VaultBase, VaultAws } from "./types";
-import { makeRequest } from "./VaultUtils";
+import { makeRequest } from "./vaultUtils";
 
 export async function awsLogin(base: VaultBase, aws: VaultAws) {
   

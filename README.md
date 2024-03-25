@@ -4,6 +4,9 @@ For this playground we are going to be writing some custom actions to control ha
 
 Currently the dev cycle in backstage can be quite slow, so we are going to be following a Test Driven Development(TDD) aproach, where we will be writing some functions and testing them as we go. For brevity I have already created the file structure as will be using. But before we go in to that there is some basic set up that needs to happen.
 
+> On the day all directories are from `/home/playground/workdir/DPG-BackstageXVault`
+And all yarn commands need to be run in the backstage base folder
+
 0. yarn install and setup vault
 
 Run `sh vault_init.sh` This will install yarn and run `yarn install --dev`to set up backstage and then run some vault commands to get to server inishilised and configured with a EC2 auth method that we will use later in the proccess to connect from backstage to vault.
@@ -24,7 +27,7 @@ In the `backstage` folder is where all the backstage code lives. With in that th
 
 Before we forget lets make a small change to the app-config file so that when we spin up backstage we can access it from our panda url.
 
-Open `app-config.yaml`
+Open `backstage/app-config.yaml`
 
 Replace `<panda-adj>` with the first part of your url (the bit between `http://` and `-panda`)
 
@@ -34,7 +37,7 @@ That is the config set up. We can now get around to makeing the playground.
 
 All of the actions we are creating will call the vault API, to help with this we are going to create a utility function that will handle the call.
 
-Open `backstage/plugins/scaffolder-backend-module-vault/src/actions/handler/VaultUtils.ts`
+Open `backstage/plugins/scaffolder-backend-module-vault/src/actions/handler/vaultUtils.ts`
 
 And paste in:
 
@@ -55,19 +58,19 @@ export async function makeRequest(req: VaultRequest) {
 
 ```
 
-To prove this works, if we run `yarn test VaultUtills` we should see that VaultUtiles passes.
+To prove this works, if we run `yarn test vaultUtills` we should see that vaultUtiles passes.
 
 3. vaultMountCreateKV
 
 Now we have the uitl function set up lets create some actions. The first action we are going to create is one that creates a vault KV engine so we can store our secrets.
 
 The first step we are going to do, to do this if create a handler. Open:
-`backstage/plugins/scaffolder-backend-module-vault/src/actions/handler/VaultSecrets.ts`
+`backstage/plugins/scaffolder-backend-module-vault/src/actions/handler/vaultSecrets.ts`
 and paste in :
 
 ```ts
 import { VaultBase, VaultMount, VaultSecret } from "./types";
-import { makeRequest } from "./VaultUtils";
+import { makeRequest } from "./vaultUtils";
 
 export async function createMountKv(base: VaultBase, mount: VaultMount) {
   if (mount.token){
@@ -103,7 +106,7 @@ export async function createMountKv(base: VaultBase, mount: VaultMount) {
 
 ```
 
-You can run `yarn test VaultSecrets` now but you will only get 1 out of 3 tests pass as end the end all of our vaultSecret test code will be in the same place.
+You can run `yarn test vaultSecrets` now but you will only get 1 out of 3 tests pass as end the end all of our vaultSecret test code will be in the same place.
 
 Now we have the handler time to create the action
 
@@ -114,7 +117,7 @@ And Paste in:
 ```ts
 import { createTemplateAction } from "@backstage/plugin-scaffolder-node"
 import { VaultBase, VaultMount } from "./handler/types";
-import { createMountKv } from "./handler/VaultSecrets";
+import { createMountKv } from "./handler/vaultSecrets";
 export function vaultMountCreateKv(base: VaultBase) {
   return createTemplateAction<VaultMount>({
     id: "vault:mount:createKv",
@@ -157,7 +160,7 @@ This is our first action so lets break down this code a little bit:
 
 Now if you run `yarn test vaultMountCreateKv` it should run the test code and pass
 
-This test code (stored `backstage/plugins/scaffolder-backend-module-vault/src/actions/vaultMountCreateKv.test.ts`)
+This test code (stored `backstage/plugins/scaffolder-backend-module-vault/src/actions/vaultMountCreateKv.ts`)
 
 calls the functions that backstage does and uses `jest.fn()` to mock functions we dont call. and `jest.spyOn` to mock the vault api call
 
@@ -165,7 +168,7 @@ calls the functions that backstage does and uses `jest.fn()` to mock functions w
 
 Now we have the code to create the kv engine. Lets write the code to load in a secret in to that engine.
 
-Lets go back to the `backstage/plugins/scaffolder-backend-module-vault/src/actions/handler/VaultSecrets.ts` file and paste in the following code at the bottem of it:
+Lets go back to the `backstage/plugins/scaffolder-backend-module-vault/src/actions/handler/vaultSecrets.ts` file and paste in the following code at the bottem of it:
 
 ```ts
 export async function createSecret(base: VaultBase, secret: VaultSecret) {
@@ -193,7 +196,7 @@ export async function createSecret(base: VaultBase, secret: VaultSecret) {
 }
 ```
 
-After this, if we run `yarn test VaultSecrets` again, we should get 2 passing tests. (still one failing but we will fix that in the next step)
+After this, if we run `yarn test vaultSecrets` again, we should get 2 passing tests. (still one failing but we will fix that in the next step)
 
 But before we get to the last secret lets put in the code for this action:
 Open: `backstage/plugins/scaffolder-backend-module-vault/src/actions/vaultSecretCreate.ts` and paste in :
@@ -201,7 +204,7 @@ Open: `backstage/plugins/scaffolder-backend-module-vault/src/actions/vaultSecret
 ```ts
 import { createTemplateAction } from "@backstage/plugin-scaffolder-node"
 import { VaultBase, VaultSecret } from "./handler/types";
-import { createSecret } from "./handler/VaultSecrets";
+import { createSecret } from "./handler/vaultSecrets";
 export function vaultSecretCreate(base: VaultBase) {
   return createTemplateAction<VaultSecret>({
     id: "vault:secret:create",
@@ -253,7 +256,7 @@ We can run the tests to prove this works with `yarn test vaultSecretCreate`
 
 Time for the last action thaty cares about secrets:
 
-Open `backstage/plugins/scaffolder-backend-module-vault/src/actions/handler/VaultSecrets.ts` again and paste in to follwoing at the bottom of the page:
+Open `backstage/plugins/scaffolder-backend-module-vault/src/actions/handler/vaultSecrets.ts` again and paste in to follwoing at the bottom of the page:
 
 ```ts
 export async function getSecret(base: VaultBase, secret: VaultSecret) {
@@ -279,15 +282,15 @@ export async function getSecret(base: VaultBase, secret: VaultSecret) {
 }
 ```
 
-Now when we run `yarn test VaultSecrets` we should get 3 passing tests
+Now when we run `yarn test vaultSecrets` we should get 3 passing tests
 
 Now lets write the action, but this one is a little diffrent than the last few as we want to return the secret to the template.
-Open: `backstage/plugins/scaffolder-backend-module-vault/src/actions/vaultSecretGet.test.ts` and paste the following:
+Open: `backstage/plugins/scaffolder-backend-module-vault/src/actions/vaultSecretGet.ts` and paste the following:
 
 ```ts
 import { createTemplateAction } from "@backstage/plugin-scaffolder-node"
 import { VaultBase, VaultSecret } from "./handler/types";
-import { getSecret } from "./handler/VaultSecrets";
+import { getSecret } from "./handler/vaultSecrets";
 export function vaultSecretGet(base: VaultBase) {
   return createTemplateAction<VaultSecret>({
     id: "vault:secret:get",
@@ -346,11 +349,11 @@ As we are getting an output we are doing something a bit diffrent with the testi
 
 6. vaultAuth
 
-We have a few more actions to write before we can get to backstage, as we now all know this lets do them all at once, open `backstage/plugins/scaffolder-backend-module-vault/src/actions/handler/VaultAuth.ts` and paste in:
+We have a few more actions to write before we can get to backstage, as we now all know this lets do them all at once, open `backstage/plugins/scaffolder-backend-module-vault/src/actions/handler/vaultAuth.ts` and paste in:
 
 ```ts
 import { VaultAuth, VaultAws, VaultBase, VaultUserpass } from "./types"
-import { makeRequest } from "./VaultUtils"
+import { makeRequest } from "./vaultUtils"
 
 export async function createAuthUserpass(base: VaultBase, auth: VaultAuth) {
   if (auth.token){
@@ -397,43 +400,6 @@ export async function createUserpassUser(base: VaultBase, userpass: VaultUserpas
   } while (!created);
 }
 
-export async function awsLogin(base: VaultBase, aws: VaultAws) {
-  
-  const optionstoken = {
-    method: "PUT",
-    headers: {
-      "X-aws-ec2-metadata-token-ttl-seconds": "21600"
-    }
-  };
-  let res = fetch("http://169.254.169.254/latest/api/token", optionstoken);
-  
-  const optionspkcs7 = {
-    method: "GET",
-    headers: {
-      "X-aws-ec2-metadata-token": await (await res).text()
-    }
-  };
-  res = fetch("http://169.254.169.254/latest/dynamic/instance-identity/pkcs7", optionspkcs7);
-  
-  const resp = await res;
-  const body = await resp.text();
-  
-  const pkcs7  = (body.split('\n').join(''));
-    const vaultRes = makeRequest(
-      {
-        base: base,
-        method: "POST",
-        endpoint: `/auth/${aws.mount}/login`,
-        body: {
-          "role": aws.role,
-          "pkcs7": pkcs7,
-          "nonce": "playground"
-        }
-      }
-    );
-    const vaultResp = await vaultRes;
-    return await vaultResp.json();
-}
 ```
 
 Now we can run `yarn test vaultAuth.test.ts`
@@ -445,7 +411,7 @@ Paste in the following:
 ```ts
 import { createTemplateAction } from "@backstage/plugin-scaffolder-node"
 import { VaultAuth, VaultBase} from "./handler/types";
-import { createAuthUserpass } from "./handler/VaultAuth";
+import { createAuthUserpass } from "./handler/vaultAuth";
 export function vaultAuthCreateUserPass(base: VaultBase) {
   return createTemplateAction<VaultAuth>({
     id: "vault:auth:createUserPass",
@@ -489,7 +455,7 @@ Then open `backstage/plugins/scaffolder-backend-module-vault/src/actions/vaultUs
 ```ts
 import { createTemplateAction } from "@backstage/plugin-scaffolder-node"
 import { VaultBase, VaultUserpass } from "./handler/types";
-import { createUserpassUser } from "./handler/VaultAuth";
+import { createUserpassUser } from "./handler/vaultAuth";
 export function vaultUserpassCreateUser(base: VaultBase) {
   return createTemplateAction<VaultUserpass>({
     id: "vault:userpass:createUser",
@@ -546,7 +512,11 @@ Now if you run `yarn test` all the tests should pass
 
 You might notice that we havnt touched `backstage/plugins/scaffolder-backend-module-vault/src/actions/vaultTokenCreate.ts` but everything is passing. This is because I have already dont all the work for you. The handeler code in `backstage/plugins/scaffolder-backend-module-vault/src/actions/handler/VaultAWSAuth.ts` is one of the more complicated files as it has to interacted with the EC2 box we are running on.
 
-8. backstage
+8. Telling backstage about our actions
+
+We need to do one more thing before we can run backstage, which is telling it what actions we want to run, and passing though ay config to them. To do this we go to `backstage/packages/backend/src/plugins/scaffolder.ts` and there is 2 blocks on commented code, which we can uncomment.
+
+9. backstage
 
 Now that that is working, time to look at our template file.
 Open: `backstage/template/template.yaml` as copying yaml noramlly end up with errors, This file is already populated but it is worth talking about who it works.

@@ -1,4 +1,4 @@
-import { createMountKv, createSecret, getSecret } from "./VaultSecrets";
+import { createMountKv, createSecret, getSecret } from "./vaultSecrets";
 
 describe("vault secret tests", () => {
   const base_url = "http://localhost:8200/v1"
